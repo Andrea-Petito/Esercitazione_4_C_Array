@@ -20,24 +20,24 @@ double calculate_final_value(double S, double portfolio_return) {
     return (1 + portfolio_return) * S;
 }
 
-string remove_non_numeric(const string& str) {
-	string result;
-	for (size_t i = 0; i < str.size(); i++) {
-		char c = str[i];
-		if (isdigit(c) || c == '-' || c == '.') {
-			result += c;
-		}		
-	}
-	return result;
-}
-
 double read_value(const string& value_str) {
-	string cleaned = remove_non_numeric(value_str);
+    string cleaned;
+    for (size_t i = 0; i < value_str.size(); i++) {
+        char c = value_str[i];
+        if (isdigit(c) || c == '-' || c == '.') {
+            cleaned += c;
+        }		
+    }
+
     stringstream ss(cleaned);
     double value;
-    ss >> value;
+    if (!(ss >> value)) {
+        cerr << "Errore nella conversione del valore: " << cleaned << endl;
+        return 0.0;
+    }
     return value;
 }
+
 
 bool read_data(const string& filename, double& S, int& n, double*& w, double*& r) {
     ifstream infile(filename);
